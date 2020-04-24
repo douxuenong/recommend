@@ -18,7 +18,7 @@ public class Movie {
     private String movieName;
 
     @ApiModelProperty("电影排名")
-    private long movieRanking;
+    private long movieRank;
 
     @ApiModelProperty("电影封面")
     private String movieImg;

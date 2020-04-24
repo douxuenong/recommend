@@ -13,13 +13,13 @@ public interface MovieService {
      * 获取热门电影
      * @return 热门电影
      */
-    List<Movie> getHotMovie();
+    String getHotMovie();
 
     /**
      * 获取用户推荐电影
      * @return 推荐电影
      */
-    List<Movie> getRecommendMovie();
+    String getRecommendMovie();
 
     /**
      * 存储用户喜爱电影

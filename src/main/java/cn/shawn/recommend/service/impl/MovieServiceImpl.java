@@ -2,16 +2,13 @@ package cn.shawn.recommend.service.impl;
 
 import cn.shawn.recommend.dao.MovieMapper;
 import cn.shawn.recommend.dao.UserMapper;
-import cn.shawn.recommend.entity.Movie;
 import cn.shawn.recommend.entity.User;
 import cn.shawn.recommend.entity.UserLike;
 import cn.shawn.recommend.service.MovieService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
+import com.alibaba.fastjson.JSONArray;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 /**
  * 电影相关
@@ -30,13 +27,13 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> getHotMovie() {
-        return movieMapper.getHotMovie();
+    public String  getHotMovie() {
+        return JSONArray.toJSONString(movieMapper.getHotMovie());
     }
 
     @Override
-    public List<Movie> getRecommendMovie() {
-        return movieMapper.getRecommendMovie();
+    public String  getRecommendMovie() {
+        return JSONArray.toJSONString(movieMapper.getRecommendMovie());
     }
 
     @Override
