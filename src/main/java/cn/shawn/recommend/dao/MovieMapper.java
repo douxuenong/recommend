@@ -23,13 +23,6 @@ public interface MovieMapper {
     @Select("select * from movie")
     List<Movie> getHotMovie();
 
-    /**
-     * TODO 集成推荐模块
-     * 获取用户推荐电影
-     * @return 推荐电影列表
-     */
-    @Select("select * from movie")
-    List<Movie> getRecommendMovie();
 
     /**
      * 添加用户喜爱
@@ -39,4 +32,12 @@ public interface MovieMapper {
     @Insert("insert into user_like(user_id,movie_id) values (#{userID},#{movieID})")
     @Options(useGeneratedKeys=true,keyProperty="id")
     int addLikeMovie(UserLike userLike);
+
+    /**
+     * 简单的模糊搜索，返回包含输入字段的电影
+     * @param movieName 输入的电影名
+     * @return 符合条件的所有电影
+     */
+    @Select("select * from movie where movieName like #{movieName}")
+    List<Movie> searchMovie(String movieName);
 }

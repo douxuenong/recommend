@@ -35,11 +35,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                /*.antMatchers("/","/register").permitAll()
-                .antMatchers("/swagger-ui.html").permitAll()
-                .antMatchers("/**").hasAuthority("USER")*/
+                .antMatchers("/","/register").permitAll()
+                 .antMatchers("/swagger-ui.html").permitAll()
+                 .antMatchers("/**").hasAuthority("USER")
                 //测试时允许全部
-                .antMatchers("/**").permitAll()
+                //.antMatchers("/**").permitAll()
                 .and()
                 .logout().logoutUrl("/logout")
                 .logoutSuccessHandler(new CustomLogoutSuccessHandler())

@@ -2,8 +2,8 @@ package cn.shawn.recommend.dao;
 
 import cn.shawn.recommend.entity.UserRating;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
-import org.mapstruct.Mapper;
 import org.springframework.stereotype.Repository;
 
 /**

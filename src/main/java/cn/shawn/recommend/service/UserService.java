@@ -2,6 +2,10 @@ package cn.shawn.recommend.service;
 
 import cn.shawn.recommend.bean.WebResponse;
 import cn.shawn.recommend.entity.User;
+import com.alibaba.fastjson.JSONArray;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
+import java.security.Principal;
 
 /**
  * @author shawn
@@ -19,4 +23,6 @@ public interface UserService {
      * @return 查得用户实体
      */
     User getByUsername(String username);
+
+
 }

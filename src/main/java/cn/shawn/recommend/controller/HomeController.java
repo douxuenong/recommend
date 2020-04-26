@@ -1,21 +1,20 @@
 package cn.shawn.recommend.controller;
 
-import cn.shawn.recommend.bean.SockettoPython;
 import cn.shawn.recommend.bean.WebResponse;
 import cn.shawn.recommend.service.impl.MovieServiceImpl;
 import cn.shawn.recommend.service.impl.UserServiceImpl;
 import com.alibaba.fastjson.JSONArray;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import com.alibaba.fastjson.JSONObject;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
+import java.util.Map;
+
 
 /**
  * @author Shawn
  */
-@Api(tags = "主页")
 @RestController
 public class HomeController {
     private final MovieServiceImpl movieService;
@@ -27,33 +26,43 @@ public class HomeController {
     }
 
     /**
+     * 获取热门电影
      * @return 热门电影列表
      */
-    @ApiOperation(value = "主页获取热门电影列表")
     @PostMapping(value = "/home")
     public String homePage(){
         return movieService.getHotMovie();
     }
 
-    @ApiOperation(value = "电影推荐")
+    /**
+     * 获取推荐电影
+     * @return 推荐电影列表
+     */
     @PostMapping(value = "/home/recommend")
-    public JSONArray getrecommendMovie(@AuthenticationPrincipal Principal principal){
-        String username = principal.getName();
-        String id = userService.getByUsername(username).getId().toString();
-        //发送给python服务端的用户名必需转化为byte[]
-        byte[] b_hostID = id.getBytes();
-        //调用与python服务端的通信方法
-        SockettoPython sockettoPython = new SockettoPython();
-        JSONArray res = sockettoPython.sendMessage(b_hostID);
-        return res;
+    public JSONArray getrecommendMovie(){
+        return movieService.getRecommendMovie();
     }
 
-    @ApiOperation(value = "勾选喜欢的电影")
+    /**
+     * 提交用户喜爱的电影
+     * @param userLikeList 用户喜爱电影编号数组
+     * @return
+     */
     @PostMapping(value = "/home/like")
     //TODO 确认是一次添加单个还是多个
-    public WebResponse addUserLike(@RequestParam Long[] userLikeList){
+    public WebResponse addUserLike(@RequestBody Long[] userLikeList){
         movieService.addLikeMovie(userLikeList);
         return WebResponse.success();
+    }
+
+    /**
+     * 电影简单搜索
+     * @return
+     */
+    @PostMapping(value = "/home/search")
+    public String searchMovie(@RequestBody Map<String,Object> param){
+        String movieName = (String)param.get("movieName");
+        return movieService.searchMovie(movieName);
     }
 
 }
