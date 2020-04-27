@@ -31,7 +31,7 @@ public class UserController {
         return userService.add(new User(username,password));
     }
 
-    @GetMapping("/user")
+    @PostMapping("/user")
     public WebResponse user(@AuthenticationPrincipal Principal principal){
         return WebResponse.success(principal.getName());
     }
