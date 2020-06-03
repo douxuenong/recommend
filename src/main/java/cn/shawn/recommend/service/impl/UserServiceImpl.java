@@ -4,6 +4,7 @@ import cn.shawn.recommend.bean.WebResponse;
 import cn.shawn.recommend.dao.UserMapper;
 import cn.shawn.recommend.entity.User;
 import cn.shawn.recommend.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,19 +15,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserMapper userMapper;
+    private  UserMapper userMapper;
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private  BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserServiceImpl(UserMapper userMapper, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    @Autowired
+    public void setUserMapper(UserMapper userMapper){
         this.userMapper = userMapper;
+    }
+
+    @Autowired
+    public void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder){
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
     public WebResponse add(User user) {
         String username = user.getUsername();
-        WebResponse webResponse = new WebResponse();
+        WebResponse webResponse;
         if(exist(username)){
             webResponse =  WebResponse.fail();
         }else {

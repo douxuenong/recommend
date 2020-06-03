@@ -2,18 +2,22 @@ package cn.shawn.recommend.service.impl;
 
 import cn.shawn.recommend.bean.SockettoPython;
 import cn.shawn.recommend.dao.MovieMapper;
+import cn.shawn.recommend.dao.RatingMapper;
 import cn.shawn.recommend.dao.UserMapper;
 import cn.shawn.recommend.entity.Movie;
 import cn.shawn.recommend.entity.User;
 import cn.shawn.recommend.entity.UserLike;
+import cn.shawn.recommend.entity.UserRating;
 import cn.shawn.recommend.service.MovieService;
 import com.alibaba.fastjson.JSONArray;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
@@ -30,9 +34,12 @@ public class MovieServiceImpl implements MovieService {
 
     private final UserMapper userMapper;
 
-    public MovieServiceImpl(MovieMapper movieMapper, UserMapper userMapper) {
+    private final RatingMapper ratingMapper;
+
+    public MovieServiceImpl(MovieMapper movieMapper, UserMapper userMapper, RatingMapper ratingMapper) {
         this.movieMapper = movieMapper;
         this.userMapper = userMapper;
+        this.ratingMapper = ratingMapper;
     }
 
     @Override
@@ -56,19 +63,39 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void addLikeMovie(Long[] movieList) {
+    public void addLikeMovie(List<Long> userLikeList) {
         String userName =(String) getContext().getAuthentication().getPrincipal();
         User user = userMapper.getUserByName(userName);
-        for (Long movieId : movieList ) {
-            movieMapper.addLikeMovie(new UserLike(user.getId(),movieId));
+        long id = user.getId();
+        for (Long movieId : userLikeList ) {
+            movieMapper.addLikeMovie(new UserLike(id,movieId));
         }
     }
 
     @Override
-    public String searchMovie(String keyword) {
+    public int addComment(long movieId, double userMovieScore, String userComment) {
+        String userName =(String) getContext().getAuthentication().getPrincipal();
+        User user = userMapper.getUserByName(userName);
+        long userId = user.getId();
+        return movieMapper.addUserRating(movieId, userMovieScore, userId, userComment);
+    }
+
+    @Override
+    public PageInfo<UserRating> getComment(long movieID,int pageNumber, int pageSize) {
+        PageHelper.startPage(pageNumber,pageSize);
+        Page<UserRating> comments = ratingMapper.getComment(movieID);
+        PageInfo<UserRating> commentsPageInfo = new PageInfo<>(comments);
+        return commentsPageInfo;
+    }
+
+    @Override
+    public PageInfo<Movie> searchMovie(String keyword,int pageNumber, int pageSize) {
         //加入通配符
         String movieName = "%" + keyword + "%";
-        return JSONArray.toJSONString(movieMapper.searchMovie(movieName));
+        PageHelper.startPage(pageNumber,pageSize);
+        Page<Movie> movies = movieMapper.searchMovie(movieName);
+        PageInfo<Movie> moviePageInfo = new PageInfo<>(movies);
+        return moviePageInfo;
     }
 
 

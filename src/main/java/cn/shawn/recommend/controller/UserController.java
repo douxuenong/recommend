@@ -28,10 +28,12 @@ public class UserController {
     public WebResponse register(@RequestBody Map<String,Object> params){
         String username = (String)params.get("username");
         String password = (String)params.get("password");
-        return userService.add(new User(username,password));
+        String phone = (String)params.get("phone");
+        String email = (String)params.get("email");
+        return userService.add(new User(username,password,phone,email));
     }
 
-    @PostMapping("/user")
+    @GetMapping("/user")
     public WebResponse user(@AuthenticationPrincipal Principal principal){
         return WebResponse.success(principal.getName());
     }

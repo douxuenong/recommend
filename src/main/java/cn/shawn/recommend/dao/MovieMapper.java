@@ -2,6 +2,8 @@ package cn.shawn.recommend.dao;
 
 import cn.shawn.recommend.entity.Movie;
 import cn.shawn.recommend.entity.UserLike;
+import cn.shawn.recommend.entity.UserRating;
+import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -29,7 +31,7 @@ public interface MovieMapper {
      * @param userLike
      * @return 修改行数
      */
-    @Insert("insert into user_like(user_id,movie_id) values (#{userID},#{movieID})")
+    @Insert("insert into user_like(user_id,movie_id) values (#{userId},#{movieId})")
     @Options(useGeneratedKeys=true,keyProperty="id")
     int addLikeMovie(UserLike userLike);
 
@@ -39,5 +41,8 @@ public interface MovieMapper {
      * @return 符合条件的所有电影
      */
     @Select("select * from movie where movieName like #{movieName}")
-    List<Movie> searchMovie(String movieName);
+    Page<Movie> searchMovie(String movieName);
+
+    @Insert("insert into user_rating(movie_id,user_movieScore,user_id,user_comment) values (#{movieId},#{userMovieScore},#{userId},#{userComment})")
+    int addUserRating(Long movieId, double userMovieScore, Long userId, String userComment);
 }

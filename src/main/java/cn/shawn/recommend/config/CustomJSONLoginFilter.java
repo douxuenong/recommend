@@ -87,10 +87,10 @@ public class CustomJSONLoginFilter extends AbstractAuthenticationProcessingFilte
     private void validateUsernameAndPassword(String username, String password) throws AuthenticationException {
         User user = userService.getByUsername(username);
         if (user == null){
-            throw new UsernameNotFoundException("user not exist");
+            throw new UsernameNotFoundException("用户名或密码错误");
         }
         if(!bCryptPasswordEncoder.matches(password,user.getPassword())){
-            throw new AuthenticationServiceException("error username or password");
+            throw new AuthenticationServiceException("用户名或密码错误");
         }
     }
 

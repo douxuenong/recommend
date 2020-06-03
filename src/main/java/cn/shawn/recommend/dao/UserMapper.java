@@ -30,7 +30,7 @@ public interface UserMapper {
      * @param  user
      * @return int
      */
-    @Insert("insert into user(username,password) values (#{username},#{password})")
+    @Insert("insert into user(username,password,phone,email) values (#{username},#{password},#{phone},#{email})")
     @Options(useGeneratedKeys=true,keyProperty="id")
     int add(User user);
 

@@ -17,4 +17,6 @@ public class UserRating {
 
     private double userMovieScore;
 
+    private String userComment;
+
 }

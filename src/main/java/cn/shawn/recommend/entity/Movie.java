@@ -8,11 +8,11 @@ import lombok.Data;
  */
 @Data
 public class Movie {
-    private long id;
+    private Long id;
 
     private String movieName;
 
-    private long movieRanking;
+    private Long movieRanking;
 
     private String movieImg;
 

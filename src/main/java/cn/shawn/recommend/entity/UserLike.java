@@ -9,11 +9,11 @@ import lombok.Data;
 @Data
 public class UserLike {
 
-    private long id;
+    private Long id;
 
-    private long userId;
+    private Long userId;
 
-    private long movieId;
+    private Long movieId;
 
     public UserLike(long userId, long movieId) {
         this.userId = userId;
